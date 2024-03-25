@@ -1,0 +1,56 @@
+423. Reconstruct Original Digits from English
+
+Given a string s containing an out-of-order English representation of digits 0-9, return the digits in ascending order.
+
+
+Example 1:
+
+Input: s = "owoztneoer"
+Output: "012"
+
+Example 2:
+
+Input: s = "fviefuro"
+Output: "45"
+ 
+
+Constraints:
+
+1 <= s.length <= 105
+s[i] is one of the characters ["e","g","f","i","h","o","n","s","r","u","t","w","v","x","z"].
+s is guaranteed to be valid.
+
+class Solution {
+public:
+    string originalDigits(string s) {
+        vector<int> count(26);
+        int nums[10];
+        int n=s.size();
+        for(int i=0;i<n;i++){
+            count[s[i]-'a']++;
+        }
+
+        //unique 
+        nums[0]=count['z'-'a']; //z is unique to zero
+        nums[2]=count['w'-'a']; //w is unique to two
+        nums[4]=count['u'-'a']; //u is unique to four
+        nums[6]=count['x'-'a']; //x is unique to six
+        nums[8]=count['g'-'a']; //g is unique to eight
+
+        //derived
+        nums[1]=count['o'-'a']-nums[0]-nums[2]-nums[4];
+        nums[3]=count['h'-'a']-nums[8];
+        nums[5]=count['f'-'a']-nums[4];
+        nums[7]=count['s'-'a']-nums[6];
+        nums[9]=count['i'-'a']-nums[6]-nums[8]-nums[5];
+
+        string result = "";
+        for (int i = 0; i < 10; i++) {
+            if (nums[i] != 0) {
+                result += string(nums[i], '0' + i);
+            }
+        }
+        return result;
+    }
+};
+
