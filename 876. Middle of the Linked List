@@ -24,20 +24,18 @@ Constraints:
 The number of nodes in the list is in the range [1, 100].
 1 <= Node.val <= 100
 
+
 class Solution {
 public:
     ListNode* middleNode(ListNode* head) {
-        ListNode* temp=head;
-        int count=0;
-        while(temp){
-            temp=temp->next;
-            count++;
+        ListNode* fast=head;
+        ListNode* slow=head;
+        while(fast && fast->next){
+            fast=fast->next->next;
+            slow=slow->next;
         }
-        temp=head;
-        for(int i=1;i<=(count/2);i++)
-            temp=temp->next;
-        
-        head=temp;
-        return head;
+        if (fast && fast->next) 
+            slow = slow->next;
+        return slow;
     }
 };
