@@ -1,0 +1,92 @@
+148. Sort List
+
+Given the head of a linked list, return the list after sorting it in ascending order.
+
+Example 1:
+
+Input: head = [4,2,1,3]
+Output: [1,2,3,4]
+
+Example 2:
+
+Input: head = [-1,5,3,4,0]
+Output: [-1,0,3,4,5]
+
+Example 3:
+
+Input: head = []
+Output: []
+ 
+
+Constraints:
+
+The number of nodes in the list is in the range [0, 5 * 104].
+-105 <= Node.val <= 105
+
+
+class Solution {
+public:
+
+    ListNode* middlenode(ListNode* head){
+        if(!head || !head->next) return head;
+
+        ListNode* slow=head;
+        ListNode* fast=head->next;
+
+        while(fast && slow){
+            fast=fast->next;
+            if(fast!=NULL){
+                fast=fast->next;
+                slow=slow->next;
+            }
+        }
+        return slow;
+    }
+
+    ListNode* merge(ListNode* list1, ListNode* list2){
+        ListNode* merged=new ListNode();
+        ListNode* temp=merged;
+        ListNode* left=list1;
+        ListNode* right=list2;
+
+        while(left && right){
+            if(left->val <= right->val){
+                temp->next=left;
+                left=left->next;
+            }
+            else{
+                temp->next=right;
+                right=right->next;
+            }
+            temp=temp->next;
+        }
+
+        while(left){
+            temp->next=left;
+            temp=temp->next;
+            left=left->next;
+        }
+
+        while(right){
+            temp->next=right;
+            temp=temp->next;
+            right=right->next;
+        }
+        return merged->next;
+    }
+
+    ListNode* sortList(ListNode* head) {
+        if(!head || !head->next) return head;
+
+        ListNode* mid=middlenode(head);
+        ListNode* left=head;
+        ListNode* right=mid->next;
+        mid->next=nullptr;
+
+        left = sortList(left);
+        right = sortList(right);
+
+        ListNode* merged=merge(left, right);
+        return merged;
+    }
+};
